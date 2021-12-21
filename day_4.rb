@@ -30,6 +30,7 @@ results = Marshal.load(Marshal.dump(boards))
                   
 draws.each do |draw|
   boards.each_with_index do |board, xi|
+    next if not results[xi]
     board.each_with_index do |row, bi|
       row.each_with_index do |val, ri|
         if val.to_i == draw.to_i
@@ -37,16 +38,22 @@ draws.each do |draw|
         end
       end
     end
+    sum = 0
     if board_wins?(results[xi])
-      puts boards[xi].join(" ")
-      puts results[xi].join(" ")
-      puts draw
+      # puts boards[xi].join(" ")
+      # puts results[xi].join(" ")
       winner = results[xi].flatten.compact
       winner.each do | val |
         sum += val.to_i
       end
-      puts sum * draw
-      exit
+      last_winner = sum * draw
+      puts boards[xi].map {|x| x.join(' ')}
+      puts results[xi].map {|x| x.join(' ')}
+      # puts results.length()
+      # puts last_winner
+      puts "Draw: #{draw} Winner: #{last_winner}"
+      puts
+      results[xi] = nil
     end
   end
 end
