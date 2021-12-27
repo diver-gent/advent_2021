@@ -21,18 +21,51 @@ x_max = [points[0].max(), points[2].max()].max()
 y_max = [points[1].max(), points[3].max()].max()
 grid = Array.new(x_max+1) {Array.new(y_max+1,0)}
 points[0].length.times do |i|
-  if (points[0][i] != points[2][i]) && (points[1][i] != points[3][i])
-    next
-  end
-  # puts "#{points[0][i]} #{points[2][i]} #{points[1][i]} #{points[3][i]}"
-  # get min and max values for x1 x2 y1 y2
   xmin = [points[0][i], points[2][i]].min() 
   xmax = [points[0][i], points[2][i]].max()
   ymin = [points[1][i], points[3][i]].min() 
   ymax = [points[1][i], points[3][i]].max()
-  for x in xmin..xmax
-    for y in ymin..ymax
+  if (points[0][i] == points[2][i]) || (points[1][i] == points[3][i])
+    for x in xmin..xmax
+      for y in ymin..ymax
+        grid[x][y] += 1
+      end
+    end
+  # a loop if x1 < x2 and y1 < y2
+  elsif points[0][i] < points[2][i] && points[1][i] < points[3][i]
+    x = points[0][i]
+    y = points[1][i]
+    while x <= points[2][i] && y <= points[3][i]
       grid[x][y] += 1
+      x += 1
+      y += 1
+    end
+  # a loop if x1 > x2 and y1 > y2
+  elsif points[0][i] > points[2][i] && points[1][i] > points[3][i]
+    x = points[0][i]
+    y = points[1][i]
+    while x >= points[2][i] && y >= points[3][i]
+      grid[x][y] += 1
+      x -= 1
+      y -= 1
+    end
+  # a loop if x1 < x2 and y1 > y2
+  elsif points[0][i] < points[2][i] && points[1][i] > points[3][i]
+    x = points[0][i]
+    y = points[1][i]
+    while x <= points[2][i] && y >= points[3][i]
+      grid[x][y] += 1
+      x += 1
+      y -= 1
+    end
+  # a loop if x1 > x2 and y1 < y2
+  elsif points[0][i] > points[2][i] && points[1][i] < points[3][i]
+    x = points[0][i]
+    y = points[1][i]
+    while x >= points[2][i] && y <= points[3][i]
+      grid[x][y] += 1
+      x -= 1
+      y += 1
     end
   end
 end
@@ -41,7 +74,7 @@ grid.each do |r|
   r.each do |e|
     if e > 1
       sum += 1
-    end
+      end
   end
 end
 puts sum
